@@ -76,7 +76,7 @@ exports.deleteStudent= factory.deleteOne(Student);
 // // @route   GET /api/v1/students/getMe
 // // @access  Private/Protect
 exports.getLoggedStudentData = asyncHandler(async (req, res, next) => {
-  req.params.id = req.Student._id;
+  req.params.id = req.student._id;
   next();
 });
 

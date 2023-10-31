@@ -11,7 +11,7 @@ exports.getCourses = factory.getAll(Course);
 // @desc    Get specific course by id
 // @route   GET /api/v1/courses/:id
 // @access  Private/Admin
-exports.getCourse = factory.getOne(Course);
+exports.getCourse = factory.getOne(Course,'reviews');
 
 // @desc    Create course
 // @route   POST  /api/v1/courses

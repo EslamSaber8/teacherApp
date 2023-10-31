@@ -14,6 +14,7 @@ const studentAuthRoute = require('./routes/studentAuthRoute');
 const teacherRoute = require('./routes/teacherRoute');
 const teacherAuthRoute = require('./routes/teacherAuthRoute');
 const courseRoute=require("./routes/courseRoute")
+const reviewRoute = require('./routes/reviewRoute');
 
 
 // Connect with db
@@ -37,6 +38,7 @@ app.use('/api/v1/studentAuth', studentAuthRoute);
 app.use('/api/v1/teachers',teacherRoute);
 app.use('/api/v1/teacherAuth', teacherAuthRoute);
 app.use('/api/v1/course', courseRoute);
+app.use('/api/v1/reviews', reviewRoute);
 
 
 

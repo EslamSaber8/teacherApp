@@ -71,8 +71,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
   // 2) Verify token (no change happens, expired token)
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
+
   // 3) Check if teacher exists
-  const currentTeacher = await Teacher.findById(decoded.teacherId);
+  const currentTeacher = await Teacher.findById(decoded.studentId);
   if (!currentTeacher) {
     return next(
       new ApiError(
@@ -81,6 +82,11 @@ exports.protect = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+
+
+
+
 
   // 4) Check if Teacher change his password after token created
   if (currentTeacher.passwordChangedAt) {

@@ -15,7 +15,7 @@ const {
   // uploadCourseImages,
   // resizeCourseImages,
 } = require('../services/courseService');
-const studentAuthService= require('../services/studentAuthService');
+const teacherAuthService= require('../services/teacherAuthService');
 
 const router = express.Router();
 
@@ -23,8 +23,8 @@ router
   .route('/')
   .get(getCourses)
   .post(
-   studentAuthService.protect,
-    studentAuthService.allowedTo('admin', 'manager'),
+  teacherAuthService.protect,
+  teacherAuthService.allowedTo('admin', 'teacher'),
     // uploadCourseImages,
     // resizeCourseImages,
     createCourseValidator,
@@ -34,16 +34,16 @@ router
   .route('/:id')
   .get(getCourseValidator, getCourse)
   .put(
-   studentAuthService.protect,
-    studentAuthService.allowedTo('admin', 'manager'),
+   teacherAuthService.protect,
+   teacherAuthService.allowedTo('admin', 'teacher'),
     // uploadCourseImages,
     // resizeCourseImages,
     updateCourseValidator,
     updateCourse
   )
   .delete(
-    studentAuthService.protect,
-    studentAuthService.allowedTo('admin'),
+     teacherAuthService.protect,
+    teacherAuthService.allowedTo('admin'),
     deleteCourseValidator,
     deleteCourse
   );

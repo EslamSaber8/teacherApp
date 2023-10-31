@@ -20,18 +20,18 @@ const studentSchema = new mongoose.Schema({
       ref: 'teacher'
   }],
   parentPhone:String,
-  attendant:{
+  attendant:[{
     type:[String], 
     default:"NewStudent"
-  },
-  grades:{
+  }],
+  grades:[{
     type:[String],
     default:"NewStudent"
-  },
-  expenses:{
+  }],
+  expenses:[{
     type:[Boolean],
     default:false
-  },
+  }],
   email: {
     type: String,
     required: [true, 'email required'],

@@ -24,6 +24,8 @@ const {
 } = require('../services/teacherService');
 
 const teacherAuthService = require('../services/teacherAuthService');
+const { uploadIMG } = require('../utils/cloudinaryUpload');
+const upload=require("../utils/multer")
 
 const router = express.Router();
 
@@ -31,7 +33,7 @@ router.use(teacherAuthService.protect);
 
 router.get('/getMe', getLoggedTeacherData, getTeacher);
 router.put('/changeMyPassword', updateLoggedTeacherPassword);
-router.put('/updateMe',uploadTeacherImage,resizeImage, updateLoggedTeacherValidator, updateLoggedTeacherData);
+router.put('/updateMe',upload.single("profileImg"), uploadIMG, updateLoggedTeacherValidator, updateLoggedTeacherData);
 router.delete('/deleteMe', deleteLoggedTeacherData);
 
 // Admin
@@ -44,11 +46,11 @@ router.put(
 router
   .route('/')
   .get(getTeachers)
-  .post(uploadTeacherImage, resizeImage, createTeacherValidator, createTeacher);
+  .post(upload.single("profileImg"), uploadIMG, createTeacherValidator, createTeacher);
 router
   .route('/:id')
   .get(getTeacherValidator, getTeacher)
-  .put(uploadTeacherImage, resizeImage, updateTeacherValidator, updateTeacher)
+  .put(upload.single("profileImg"), uploadIMG, updateTeacherValidator, updateTeacher)
   .delete(deleteTeacherValidator, deleteTeacher);
 
 module.exports = router;

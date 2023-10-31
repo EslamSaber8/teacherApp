@@ -126,9 +126,7 @@ exports.deleteTeacherValidator = [check("id").isMongoId().withMessage("Invalid t
 exports.updateLoggedTeacherValidator = [
     body("fullName").optional().isLength({ min: 6 }).withMessage("Too short fullName").isLength({ max: 32 }).withMessage("Too long fullName"),
 
-    check("email")
-        .notEmpty()
-        .withMessage("Email required")
+    check("email").optional()
         .isEmail()
         .withMessage("Invalid email address")
         .custom((val) =>

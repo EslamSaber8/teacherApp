@@ -11,7 +11,7 @@ exports.createCourseValidator = [
    .isMongoId()
    .withMessage('Invalid student id format'),
 
-   check("lessons").notEmpty().withMessage("should include lesson "),
+  //  check("lessons").notEmpty().withMessage("should include lesson "),
     check('subject') 
     .notEmpty()
     .withMessage('subject required'),
