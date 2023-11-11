@@ -63,9 +63,7 @@ exports.getTeacherValidator = [check("id").isMongoId().withMessage("Invalid teac
 exports.updateTeacherValidator = [
     check("id").isMongoId().withMessage("Invalid teacher  id format"),
     body("fullName").optional().isLength({ min: 6 }).withMessage("Too short fullName").isLength({ max: 32 }).withMessage("Too long fullName"),
-    check("email")
-        .notEmpty()
-        .withMessage("Email required")
+    check("email").optional()
         .isEmail()
         .withMessage("Invalid email address")
         .custom((val) =>

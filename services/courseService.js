@@ -2,6 +2,8 @@ const asyncHandler = require('express-async-handler');
 const factory = require('./handlersFactory');
 const ApiError = require('../utils/apiError');
 const Course = require('../models/courseModel');
+const Student=require("../models/studentModel")
+const stripe=require('stripe')(process.env.STRIPE_SECRET);
 
 // @desc    Get list of course
 // @route   GET /api/v1/courses
@@ -30,6 +32,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
      subject:req.body.student,
      level: req.body.level,
      lessons:req.body.student,
+     price:req.body.price
       
     },
     {
@@ -49,3 +52,33 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/courses/:id
 // @access  Private/Admin
 exports.deleteCourse= factory.deleteOne(Course);
+// @desc    Get specific pre course by id
+// @route   GET /api/v1/courses/pre/:id
+// @access  Private/user
+exports.getPreCourse = asyncHandler(async (req, res, next) => {
+  const id=req.params
+  const course = await Course.findOne({ id }).select('-lessons');
+
+ 
+  if (!course) {
+    return next(new AppError('No course found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      course
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
