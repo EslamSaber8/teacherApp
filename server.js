@@ -48,7 +48,8 @@ app.use('/api/v1/teachers',teacherRoute);
 app.use('/api/v1/teacherAuth', teacherAuthRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/reviews', reviewRoute);
-app.use("/api/v1/carts",cartRoute)
+app.use("/api/v1/carts",cartRoute);
+
 
 
 

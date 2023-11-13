@@ -110,7 +110,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Authorization (teacher Permissions)
-// ["Student","admin", "manager"]
+// ["Student","admin", "teacher"]
 exports.allowedTo = (...roles) =>
   asyncHandler(async (req, res, next) => {
     // 1) access roles
