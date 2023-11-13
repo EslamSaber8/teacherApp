@@ -148,7 +148,7 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
       },
     ],
     mode: 'payment',
-    success_url: `${req.protocol}://${req.get('host')}/course`,
+    success_url: `${req.protocol}://${req.get('host')}/api/v1/course`,
     cancel_url: `${req.protocol}://${req.get('host')}/carts`,
     client_reference_id: req.params.cartId,
   });
