@@ -148,7 +148,7 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
       },
     ],
     mode: 'payment',
-    success_url: `${req.protocol}://${req.get('host')}/courses`,
+    success_url: `${req.protocol}://${req.get('host')}/course`,
     cancel_url: `${req.protocol}://${req.get('host')}/carts`,
     client_reference_id: req.params.cartId,
   });
@@ -207,6 +207,7 @@ exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   }
   if (event.type === 'checkout.session.completed') {
     //  Create order
+    console.log("donnnne")
     createCard(event.data.object);
   }
 
