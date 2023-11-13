@@ -28,10 +28,8 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
     req.params.id,
     {
      teacher:req.body.teacher,
-     student:req.body.student,
      subject:req.body.student,
      level: req.body.level,
-     lessons:req.body.student,
      price:req.body.price
       
     },

@@ -7,9 +7,6 @@ exports.createCourseValidator = [
   check('teacher').notEmpty().withMessage('teacher require')
    .isMongoId()
    .withMessage('Invalid teacher id format'),
-   check('student').notEmpty().withMessage('student require')
-   .isMongoId()
-   .withMessage('Invalid student id format'),
 
   //  check("lessons").notEmpty().withMessage("should include lesson "),
     check('subject') 
@@ -39,9 +36,6 @@ exports.updateCourseValidator = [
   check('teachers').optional()
   .isMongoId()
   .withMessage('Invalid teacher id format'),
-  check('student').optional()
-  .isMongoId()
-  .withMessage('Invalid student id format'),
   check("lessons").optional(),
   check('subject') .optional(),
   check('level').optional().isNumeric().withMessage("level must be a number between 1 and 12")

@@ -18,6 +18,7 @@ const teacherAuthRoute = require('./routes/teacherAuthRoute');
 const courseRoute=require("./routes/courseRoute")
 const reviewRoute = require('./routes/reviewRoute');
 const cartRoute = require('./routes/cartRoute');
+const { webhookCheckout } = require('./services/cartService');
 
 
 // Connect with db
@@ -31,6 +32,12 @@ app.options('*', cors());
 
 // compress all responses
 app.use(compression());
+// Checkout webhook
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout
+);
 
 // Middlewares
 app.use(express.json());

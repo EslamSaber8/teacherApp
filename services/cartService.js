@@ -156,3 +156,59 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   // 4) send session to response
   res.status(200).json({ status: 'success', session });
 });
+
+
+
+const createCard = async (session) => {
+  const cartId = session.client_reference_id;
+
+  const cart = await Cart.findById(cartId);
+  const student = await student.findOne({ email: session.customer_email });
+ const courses=cart.cartItems.map(item=>item.course);
+ await student.course.push(courses)
+    // 5) Clear cart depend on cartId
+    await Cart.findByIdAndDelete(cartId);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @desc    This webhook will run when stripe payment success paid
+// @route   POST /webhook-checkout
+// @access  Protected/User
+exports.webhookCheckout = asyncHandler(async (req, res, next) => {
+  const sig = req.headers[process.env.STRIPE_WEBHOOK_SECRET];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+  if (event.type === 'checkout.session.completed') {
+    //  Create order
+    createCard(event.data.object);
+  }
+
+  res.status(200).json({ received: true });
+});

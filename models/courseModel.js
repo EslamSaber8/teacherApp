@@ -32,11 +32,7 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Teacher'
     },
-    student: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Student',
-      required: [true, 'Review must belong to Student'],
-    },
+    
   subject :String, 
   level:{
     type:Number,

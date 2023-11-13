@@ -54,7 +54,11 @@ const studentSchema = new mongoose.Schema({
   active:{
     type:Boolean,
     default:true
-  }
+  },
+  courses:[{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Course',
+  }],
 });
 
 studentSchema.pre('save', async function (next) {
