@@ -197,7 +197,7 @@ const createCard = async (session) => {
 // @route   POST /webhook-checkout
 // @access  Protected/User
 exports.webhookCheckout = asyncHandler(async (req, res, next) => {
-  const sig = req.headers[process.env.STRIPE_WEBHOOK_SECRET];
+  const sig = req.headers['stripe-signature'];
 
   let event;
 
