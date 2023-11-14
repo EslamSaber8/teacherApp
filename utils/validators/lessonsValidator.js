@@ -6,7 +6,6 @@ exports.createLessonsValidator = [
   check('courseId').notEmpty().withMessage(' courseId require')
    .isMongoId()
    .withMessage('Invalid  courseId format'),
-   check('lesson').notEmpty().withMessage("should have Lessons "),
 
 
   validatorMiddleware,

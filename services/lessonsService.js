@@ -1,84 +1,87 @@
 const asyncHandler = require('express-async-handler');
+const factory = require('./handlersFactory');
 const ApiError = require('../utils/apiError');
+const Lessons = require('../models/lessonsModel');
+// @desc    Get list of course
+// @route   GET /api/v1/courses
+// @access  Private/Admin
+exports.getLessons = factory.getAll(Lessons);
+
+// @desc    Get specific course by id
+// @route   GET /api/v1/courses/:id
+// @access  Private/Admin
+exports.getLesson = factory.getOne(Lessons);
+
+// @desc    Create course
+// @route   POST  /api/v1/courses
+// @access  Private/Admin
+exports.createLesson= factory.createOne(Lessons);
+
+// @desc    Update specific course
+// @route   PUT /api/v1/courses/:id
+// @access  Private/Admin
+ 
+exports.updateLesson = asyncHandler(async (req, res, next) => {
+  const lessonId = req.params.id;
+
+  const updatedData = {
+    $push: {
+      lessons: { $each: req.body.lessons },
+    },
+  };
+
+  const updatedLesson = await Lessons.findByIdAndUpdate(
+    lessonId,
+    updatedData,
+    { new: true }
+  );
+
+  if (!updatedLesson) {
+    return next(new ApiError(`No lesson found for this id ${lessonId}`, 404));
+  }
+
+  res.status(200).json({ data: updatedLesson });
+});
 
 
-exports.createLesson = asyncHandler(async (req, res, next) => {
-    const courseId = req.body.courseId; // Assuming courseId is passed in the request body
-    const lessonData = {
-      video: req.body.video,
-      description: req.body.description,
-      assignments: req.body.assignments,
-      notes: req.body.notes,
-    };
-  
-    const newLesson = new Lesson({
-      courseId,
-      lessons: [lessonData],
-    });
-  
-    const savedLesson = await newLesson.save();
-  
-    res.status(201).json({ data: savedLesson });
-  });
-  
-  // READ
-  exports.getLessonById = asyncHandler(async (req, res, next) => {
-    const lessonId = req.params.id;
-  
-    const lesson = await Lesson.findById(lessonId);
-  
-    if (!lesson) {
-      return next(new ApiError(`No lesson found for this id ${lessonId}`, 404));
-    }
-  
-    res.status(200).json({ data: lesson });
-  });
-  
-  exports.getAllLessonsByCourse = asyncHandler(async (req, res, next) => {
-    const courseId = req.params.courseId;
-  
-    const lessons = await Lesson.find({ courseId });
-  
-    res.status(200).json({ data: lessons });
-  });
-  
-  // UPDATE
-  exports.updateLesson = asyncHandler(async (req, res, next) => {
-    const lessonId = req.params.id;
-  
-    const updatedData = {
-      $push: {
-        lessons: {
-          video: req.body.video,
-          description: req.body.description,
-          assignments: req.body.assignments,
-          notes: req.body.notes,
-        },
-      },
-    };
-  
-    const updatedLesson = await Lesson.findByIdAndUpdate(
-      lessonId,
-      updatedData,
-      { new: true }
-    );
-  
-    if (!updatedLesson) {
-      return next(new ApiError(`No lesson found for this id ${lessonId}`, 404));
-    }
-  
-    res.status(200).json({ data: updatedLesson });
-  });
-  
-  // DELETE
-  exports.deleteLesson = asyncHandler(async (req, res, next) => {
-    const lessonId = req.params.id;
-  
-    const deletedLesson = await Lesson.findByIdAndRemove(lessonId);
-  
-    if (!deletedLesson) {
-      return next(new ApiError(`No lesson found for this id ${lessonId}`, 404));
-    }
-  
-    res.status(200).json({ data: deletedLesson });
-  });
+// @desc    Delete specific course
+// @route   DELETE /api/v1/courses/:id
+// @access  Private/Admin
+exports.deleteLesson= factory.deleteOne(Lessons);
+
+
+
+
+
+
+exports.updateLessonInArray = asyncHandler(async (req, res, next) => {
+  const lessonId = req.params.lessonId; // ID of the lesson to be updated
+  const lessonToUpdateId = req.body.lessonId; // ID of the specific lesson inside the array to be updated
+
+  const updatedData = {
+    $set: {
+      'lessons.$[elem].video': req.body.video,
+      'lessons.$[elem].description': req.body.description,
+      'lessons.$[elem].assignments': req.body.assignments,
+      'lessons.$[elem].notes': req.body.notes,
+    },
+  };
+
+  const options = {
+    arrayFilters: [{ 'elem._id': lessonToUpdateId }],
+    new: true,
+  };
+
+  const updatedLesson = await Lessons.findByIdAndUpdate(
+    lessonId,
+    updatedData,
+    options
+  );
+
+  if (!updatedLesson) {
+    return next(new ApiError(`No lesson found for this id ${lessonId}`, 404));
+  }
+
+  res.status(200).json({ data: updatedLesson });
+});
+

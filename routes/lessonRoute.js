@@ -9,40 +9,44 @@ deleteLessonsValidator,
 } = require('../utils/validators/lessonsValidator');
 
 const {
-  getAllLessonsByCourse,
-  getLessonById ,
-  createLesson,
-  updateLesson,
-  deleteLesson ,
+getLessons,
+getLesson,
+createLesson,
+updateLesson,
+deleteLesson,
+updateLessonInArray
  
 } = require('../services/lessonsService');
-const studentAuthService= require('../services/studentAuthService');
+const teacherAuthService= require('../services/teacherAuthService');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(getAllLessonsByCourse)
+  .get(getLessons)
   .post(
-  studentAuthService.protect,
-  studentAuthService.allowedTo('admin', 'teacher'),
+  teacherAuthService.protect,
+ teacherAuthService.allowedTo('admin', 'teacher'),
   createLessonsValidator,
   createLesson
   );
 router
   .route('/:id')
-  .get( getLessonsValidator,getLessonById)
+  .get( getLessonsValidator,getLesson)
   .put(
-   studentAuthService.protect,
-   studentAuthService.allowedTo('admin', 'teacher'),
+  teacherAuthService.protect,
+   teacherAuthService.allowedTo('admin', 'teacher'),
    updateLessonsValidator,
    updateLesson
   )
   .delete(
-    studentAuthService.protect,
-    studentAuthService.allowedTo('admin',"teacher"),
+    teacherAuthService.protect,
+    teacherAuthService.allowedTo('admin',"teacher"),
     deleteLessonsValidator,
     deleteLesson
   );
-
+  router.put(
+    '/updateLesson/:lessonId',
+    updateLessonInArray 
+  );
 module.exports = router;

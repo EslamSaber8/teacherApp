@@ -4,6 +4,7 @@ const ApiError = require('../utils/apiError');
 const Course = require('../models/courseModel');
 const Cart = require('../models/cartModel');
 const stripe = require('stripe')(process.env.STRIPE_SECRET);
+const Student=require("../models/studentModel")
 
 const calcTotalCartPrice = (cart) => {
   let totalPrice = 0;
@@ -163,12 +164,16 @@ const createCard = async (session) => {
   const cartId = session.client_reference_id;
 
   const cart = await Cart.findById(cartId);
-  const student = await student.findOne({ email: session.customer_email });
- const courses=cart.cartItems.map(item=>item.course);
- await student.course.push(courses)
-    // 5) Clear cart depend on cartId
-    await Cart.findByIdAndDelete(cartId);
-  }
+  const student = await Student.findOne({ email: session.customer_email });
+
+  const courses = cart.cartItems.map(item => item.course);
+
+  student.courses.push(...courses); // Use the spread operator to push individual courses
+
+  await student.save(); // Save the updated student document
+
+  await Cart.findByIdAndDelete(cartId);
+}
 
 
 
