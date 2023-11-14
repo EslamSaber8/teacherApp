@@ -1,33 +1,7 @@
 const mongoose = require('mongoose');
-
-/*
-
-
-const setImageURL = (doc) => {
-  if (doc.imageCover) {
-    const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
-    doc.imageCover = imageUrl;
-  }
-  if (doc.images) {
-    const imagesList = [];
-    doc.images.forEach((image) => {
-      const imageUrl = `${process.env.BASE_URL}/products/${image}`;
-      imagesList.push(imageUrl);
-    });
-    doc.images = imagesList;
-  }
-};
-// findOne, findAll and update
-productSchema.post('init', (doc) => {
-  setImageURL(doc);
-});
-
-// create
-productSchema.post('save', (doc) => {
-  setImageURL(doc);
-});
-*/
+const { string } = require('sharp/lib/is');
 const courseSchema = new mongoose.Schema({
+  titel:String,
    teacher:{
         type: mongoose.Schema.ObjectId,
         ref: 'Teacher'
@@ -41,10 +15,8 @@ const courseSchema = new mongoose.Schema({
 },
   
   lessons:[{
-    video:String,
-    description:String,
-    assignments:String,
-    notes:String
+    type: mongoose.Schema.ObjectId,
+        ref: 'Lessons'
   }],
   price:Number,
   ratingsAverage: {
@@ -77,13 +49,7 @@ courseSchema.pre(/^find/, function (next) {
   });
   next();
 });
-courseSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'student',
-    select: 'fullName -_id',
-  });
-  next();
-});
+
 const Course = mongoose.model('Course', courseSchema);
 
 module.exports = Course;

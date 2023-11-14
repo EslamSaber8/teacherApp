@@ -2,9 +2,6 @@ const asyncHandler = require('express-async-handler');
 const factory = require('./handlersFactory');
 const ApiError = require('../utils/apiError');
 const Course = require('../models/courseModel');
-const Student=require("../models/studentModel")
-const stripe=require('stripe')(process.env.STRIPE_SECRET);
-
 // @desc    Get list of course
 // @route   GET /api/v1/courses
 // @access  Private/Admin

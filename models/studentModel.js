@@ -67,6 +67,13 @@ studentSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
+studentSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'course',
+    select: 'titel -_id',
+  });
+  next();
+});
 
 const Student = mongoose.model('Student', studentSchema);
 

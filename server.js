@@ -15,7 +15,8 @@ const studentRoute = require('./routes/studentRoute');
 const studentAuthRoute = require('./routes/studentAuthRoute');
 const teacherRoute = require('./routes/teacherRoute');
 const teacherAuthRoute = require('./routes/teacherAuthRoute');
-const courseRoute=require("./routes/courseRoute")
+const courseRoute=require("./routes/courseRoute");
+const lessonRoute=require("./routes/lessonRoute");
 const reviewRoute = require('./routes/reviewRoute');
 const cartRoute = require('./routes/cartRoute');
 const { webhookCheckout } = require('./services/cartService');
@@ -56,6 +57,7 @@ app.use('/api/v1/teacherAuth', teacherAuthRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/reviews', reviewRoute);
 app.use("/api/v1/carts",cartRoute);
+app.use("/api/v1/lessons",lessonRoute);
 
 
 

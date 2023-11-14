@@ -33,8 +33,6 @@ router
   .post(
   teacherAuthService.protect,
   teacherAuthService.allowedTo('admin', 'teacher'),
-    // uploadCourseImages,
-    // resizeCourseImages,
     createCourseValidator,
     createCourse
   );
@@ -44,8 +42,6 @@ router
   .put(
    teacherAuthService.protect,
    teacherAuthService.allowedTo('admin', 'teacher'),
-    // uploadCourseImages,
-    // resizeCourseImages,
     updateCourseValidator,
     updateCourse
   )

@@ -4,6 +4,7 @@ const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 const Course = require('../../models/courseModel');
 
 exports.createCourseValidator = [
+  check("titel").notEmpty().withMessage('titel require'),
   check('teacher').notEmpty().withMessage('teacher require')
    .isMongoId()
    .withMessage('Invalid teacher id format'),
@@ -32,11 +33,10 @@ exports.getCourseValidator = [
 
 exports.updateCourseValidator = [
   check('id').isMongoId().withMessage('Invalid course  id format'),
-
+  check('titel').optional(),
   check('teachers').optional()
   .isMongoId()
   .withMessage('Invalid teacher id format'),
-  check("lessons").optional(),
   check('subject') .optional(),
   check('level').optional().isNumeric().withMessage("level must be a number between 1 and 12")
     .custom((value) => {
