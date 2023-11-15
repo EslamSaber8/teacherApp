@@ -151,6 +151,7 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     mode: 'payment',
     success_url: "https://teacherapp-dwgh.onrender.com/api/v1/courses",
     cancel_url: `${req.protocol}://${req.get('host')}/carts`,
+    customer_email: req.student.email,
     client_reference_id: req.params.cartId,
   });
 
@@ -167,7 +168,7 @@ const createCard = async (session) => {
   const student = await Student.findOne({ email: session.customer_email });
 
   const courses = cart.cartItems.map(item => ({id:item.course}));
-  console.log(student);
+  console.log(student)
   student.courses.push(...courses); // Use the spread operator to push individual courses
 
   await student.save(); // Save the updated student document
