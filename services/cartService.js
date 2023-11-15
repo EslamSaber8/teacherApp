@@ -167,7 +167,7 @@ const createCard = async (session) => {
   const cart = await Cart.findById(cartId);
   const student = await Student.findOne({ email: session.customer_email });
 
-  const courses = cart.cartItems.map(item => ({id:item.course}));
+  const courses = cart.cartItems.map(item => item.course);
   console.log(student)
   student.courses.push(...courses); // Use the spread operator to push individual courses
 
