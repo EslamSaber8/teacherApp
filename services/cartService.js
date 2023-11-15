@@ -162,9 +162,11 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
 
 const createCard = async (session) => {
   const cartId = session.client_reference_id;
+  console.log("fhdhg");
 
   const cart = await Cart.findById(cartId);
   const student = await Student.findOne({ email: session.customer_email });
+  console.log(cart.cartItems);
 
   const courses = cart.cartItems.map(item => item.course);
 
