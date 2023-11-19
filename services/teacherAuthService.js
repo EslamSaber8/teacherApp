@@ -9,6 +9,8 @@ const sendEmail = require('../utils/sendEmail');
 const createToken = require('../utils/createToken');
 
 const Teacher = require('../models/teacherModel');
+const Course=require("../models/courseModel");
+const Lesson = require('../models/lessonsModel');
 
 // @desc    Signup
 // @route   GET /api/v1/teacherAuth/signup
@@ -225,4 +227,59 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   // 3) if everything is ok, generate token
   const token = createToken(teacher._id);
   res.status(200).json({ token });
+});
+
+
+exports.allowTeacher = asyncHandler(async (req, res, next) => {
+  let courseId=req.params.id;
+ const course= await Course.findOne({
+  courseId
+  });
+  if (!course) {
+    return next(new ApiError(' no course with this Id'));
+  }
+  if (course.teacher && req.teacher && course.teacher._id && req.teacher._id &&
+    course.teacher._id.toString() === req.teacher._id.toString()) {
+  next();
+}
+else if(req.role==="admin"){
+  next();
+}
+  else{
+    return next(new ApiError(' you are not allow for this course'));
+  }
+
+});
+
+
+
+
+exports.allowLesson = asyncHandler(async (req, res, next) => {
+  let lessonId=req.params.id;
+ const lesson= await Lesson.findOne({
+  lessonId
+  });
+  if (!lesson) {
+    return next(new ApiError(' no lesson with this Id'));
+  }
+ let courseId=lesson.courseId;
+  const course= await Course.findOne({
+    courseId
+    });
+    if (!course) {
+      return next(new ApiError(' no course with this Id'));
+    }
+    console.log(course.teacher._id);
+    console.log(req.teacher._id);
+  if (course.teacher && req.teacher && course.teacher._id && req.teacher._id &&
+    course.teacher._id.toString() === req.teacher._id.toString()) {
+  next();
+}
+else if(req.role==="admin"){
+  next();
+}
+  else{
+    return next(new ApiError(' you are not allow for this course'));
+  }
+
 });

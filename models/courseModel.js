@@ -45,7 +45,7 @@ courseSchema.virtual('reviews', {
 courseSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'teacher',
-    select: 'fullName -_id',
+    select: 'fullName _id',
   });
   next();
 });

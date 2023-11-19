@@ -42,12 +42,14 @@ router
   .put(
    teacherAuthService.protect,
    teacherAuthService.allowedTo('admin', 'teacher'),
+   teacherAuthService.allowTeacher,
     updateCourseValidator,
     updateCourse
   )
   .delete(
      teacherAuthService.protect,
-    teacherAuthService.allowedTo('admin'),
+    teacherAuthService.allowedTo('admin',"teacher"),
+    teacherAuthService.allowTeacher,
     deleteCourseValidator,
     deleteCourse
   );

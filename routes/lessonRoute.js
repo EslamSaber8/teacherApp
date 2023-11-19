@@ -1,4 +1,5 @@
 const express = require('express');
+const upload = require("../utils/multer")
 const {
 getLessonsValidator,
 createLessonsValidator,
@@ -12,12 +13,11 @@ const {
 getLessons,
 getLesson,
 createLesson,
-updateLesson,
 deleteLesson,
-updateLessonInArray
- 
+updateLesson
 } = require('../services/lessonsService');
 const teacherAuthService= require('../services/teacherAuthService');
+const { uploadVideo } = require('../utils/cloudinaryUpload');
 
 const router = express.Router();
 
@@ -27,7 +27,10 @@ router
   .post(
   teacherAuthService.protect,
  teacherAuthService.allowedTo('admin', 'teacher'),
+  upload.single("video"),
   createLessonsValidator,
+ 
+  uploadVideo,
   createLesson
   );
 router
@@ -36,17 +39,17 @@ router
   .put(
   teacherAuthService.protect,
    teacherAuthService.allowedTo('admin', 'teacher'),
+   teacherAuthService.allowLesson,
    updateLessonsValidator,
+   upload.single("video"),
+   uploadVideo,
    updateLesson
   )
   .delete(
     teacherAuthService.protect,
     teacherAuthService.allowedTo('admin',"teacher"),
+    teacherAuthService.allowLesson,
     deleteLessonsValidator,
     deleteLesson
-  );
-  router.put(
-    '/updateLesson/:lessonId',
-    updateLessonInArray 
   );
 module.exports = router;

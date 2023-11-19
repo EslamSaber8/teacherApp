@@ -127,6 +127,7 @@ exports.clearCart = asyncHandler(async (req, res, next) => {
 exports.checkoutSession = asyncHandler(async (req, res, next) => {
   // 1) Get cart depend on cartId
   const cart = await Cart.findById(req.params.cartId);
+  console.log(cart.student);
   if (!cart) {
     return next(
       new ApiError(`There is no such cart with id ${req.params.cartId}`, 404)
@@ -149,7 +150,7 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
       },
     ],
     mode: 'payment',
-    success_url: "https://teacherapp-dwgh.onrender.com/api/v1/courses",
+    success_url: `https://teacherapp-dwgh.onrender.com/api/v1/students/${cart.student}`,
     cancel_url: `${req.protocol}://${req.get('host')}/carts`,
     customer_email: req.student.email,
     client_reference_id: req.params.cartId,

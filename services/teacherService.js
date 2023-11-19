@@ -1,34 +1,10 @@
 const asyncHandler = require('express-async-handler');
-const { v4: uuidv4 } = require('uuid');
-const sharp = require('sharp');
 const bcrypt = require('bcryptjs');
 
 const factory = require('./handlersFactory');
 const ApiError = require('../utils/apiError');
-const { uploadSingleImage } = require('../middlewares/uploadImageMiddleware');
 const createToken = require('../utils/createToken');
 const Teacher= require('../models/teacherModel');
-
-// Upload single image
-exports.uploadTeacherImage = uploadSingleImage('profileImg');
-
-// Image processing
-exports.resizeImage = asyncHandler(async (req, res, next) => {
-  const filename = `teacher-${uuidv4()}-${Date.now()}.jpeg`;
-
-  if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat('jpeg')
-      .jpeg({ quality: 95 })
-      .toFile(`uploads/teachers/${filename}`);
-
-    // Save image into our db
-    req.body.profileImg = filename;
-  }
-
-  next();
-});
 
 // @desc    Get list of teachers
 // @route   GET /api/v1/teachers
@@ -135,6 +111,7 @@ exports.updateLoggedTeacherData = asyncHandler(async (req, res, next) => {
       subject:req.body.subject,
       level:req.body. level,
      classes:req.body.classes,
+     role:req.body.role
     },
     { new: true }
   );

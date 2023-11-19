@@ -9,6 +9,8 @@ const sendEmail = require('../utils/sendEmail');
 const createToken = require('../utils/createToken');
 
 const Student = require('../models/studentModel');
+const { allowedTo } = require('./teacherAuthService');
+const Teacher = require('../models/teacherModel');
 
 // @desc    Signup
 // @route   GET /api/v1/studentAuth/signup
@@ -71,20 +73,21 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   // 2) Verify token (no change happens, expired token)
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  console.log(decoded)
 
   // 3) Check if student exists
   const currentStudent = await Student.findById(decoded.studentId);
-  if (!currentStudent) {
+  const currentTeacher=await Teacher.findById(decoded.studentId)
+  if (!currentStudent && !currentTeacher) {
     return next(
       new ApiError(
         'The student that belong to this token does no longer exist',
         401
       )
     );
-  }
-
-  // 4) Check if Student change his password after token created
-  if (currentStudent.passwordChangedAt) {
+  };
+  if(currentStudent){
+    if (currentStudent.passwordChangedAt) {
     const passChangedTimestamp = parseInt(
       currentStudent.passwordChangedAt.getTime() / 1000,
       10
@@ -98,9 +101,46 @@ exports.protect = asyncHandler(async (req, res, next) => {
         )
       );
     }
-  }
+    
+  }req.student = currentStudent;}
+  // 4) Check if Student change his password after token created
+  // if (currentStudent.passwordChangedAt) {
+  //   const passChangedTimestamp = parseInt(
+  //     currentStudent.passwordChangedAt.getTime() / 1000,
+  //     10
+  //   );
+  //   // Password changed after token created (Error)
+  //   if (passChangedTimestamp > decoded.iat) {
+  //     return next(
+  //       new ApiError(
+  //         'Student recently changed his password. please login again..',
+  //         401
+  //       )
+  //     );
+  //   }
+  //   req.student = currentStudent;
+  // }
+  else{
+     if(currentTeacher.passwordChangedAt) {
+    const passChangedTimestamp = parseInt(
+      currentTeacher.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    // Password changed after token created (Error)
+    if (passChangedTimestamp > decoded.iat) {
+      return next(
+        new ApiError(
+          'Student recently changed his password. please login again..',
+          401
+        )
+      );
+    }
+   
+  }req.student = currentTeacher;}
+   
+  
 
-  req.student = currentStudent;
+  
   next();
 });
 
@@ -110,7 +150,12 @@ exports.allowedTo = (...roles) =>
   asyncHandler(async (req, res, next) => {
     // 1) access roles
     // 2) access registered user (req.student.role)
+    console.log(req.student);
+    console.log(req.teacher);
     if (!roles.includes(req.student.role)) {
+      if(roles.includes("admin")){
+      allowedTo("admin")
+    }
       return next(
         new ApiError('You are not allowed to access this route', 403)
       );

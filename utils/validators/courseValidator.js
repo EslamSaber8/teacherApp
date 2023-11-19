@@ -1,7 +1,7 @@
 
 const { check } = require('express-validator');
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
-const Course = require('../../models/courseModel');
+
 
 exports.createCourseValidator = [
   check("titel").notEmpty().withMessage('titel require'),
